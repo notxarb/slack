@@ -71,7 +71,7 @@ func TestSlack_GetDNDInfo(t *testing.T) {
 	}
 	once.Do(startServer)
 	api := New("testing-token", OptionAPIURL("http://"+serverAddr+"/"))
-	userDNDInfoResponse, err := api.GetDNDInfo(nil)
+	userDNDInfoResponse, err := api.GetDNDInfo(nil, nil)
 	if err != nil {
 		t.Fatalf("Unexpected error: %s", err)
 	}
@@ -114,7 +114,7 @@ func TestSlack_GetDNDTeamInfo(t *testing.T) {
 	}
 	once.Do(startServer)
 	api := New("testing-token", OptionAPIURL("http://"+serverAddr+"/"))
-	usersDNDInfoResponse, err := api.GetDNDTeamInfo(nil)
+	usersDNDInfoResponse, err := api.GetDNDTeamInfo(nil, nil)
 	if err != nil {
 		t.Fatalf("Unexpected error: %s", err)
 	}
