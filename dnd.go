@@ -84,17 +84,20 @@ func (api *Client) EndSnoozeContext(ctx context.Context) (*DNDStatus, error) {
 }
 
 // GetDNDInfo provides information about a user's current Do Not Disturb settings.
-func (api *Client) GetDNDInfo(user *string) (*DNDStatus, error) {
-	return api.GetDNDInfoContext(context.Background(), user)
+func (api *Client) GetDNDInfo(user, teamID *string) (*DNDStatus, error) {
+	return api.GetDNDInfoContext(context.Background(), user, teamID)
 }
 
 // GetDNDInfoContext provides information about a user's current Do Not Disturb settings with a custom context.
-func (api *Client) GetDNDInfoContext(ctx context.Context, user *string) (*DNDStatus, error) {
+func (api *Client) GetDNDInfoContext(ctx context.Context, user, teamID *string) (*DNDStatus, error) {
 	values := url.Values{
 		"token": {api.token},
 	}
 	if user != nil {
 		values.Set("user", *user)
+	}
+	if teamID != nil {
+		values.Set("team_id", *teamID)
 	}
 
 	response, err := api.dndRequest(ctx, "dnd.info", values)
@@ -105,15 +108,18 @@ func (api *Client) GetDNDInfoContext(ctx context.Context, user *string) (*DNDSta
 }
 
 // GetDNDTeamInfo provides information about a user's current Do Not Disturb settings.
-func (api *Client) GetDNDTeamInfo(users []string) (map[string]DNDStatus, error) {
-	return api.GetDNDTeamInfoContext(context.Background(), users)
+func (api *Client) GetDNDTeamInfo(users []string, teamID *string) (map[string]DNDStatus, error) {
+	return api.GetDNDTeamInfoContext(context.Background(), users, teamID)
 }
 
 // GetDNDTeamInfoContext provides information about a user's current Do Not Disturb settings with a custom context.
-func (api *Client) GetDNDTeamInfoContext(ctx context.Context, users []string) (map[string]DNDStatus, error) {
+func (api *Client) GetDNDTeamInfoContext(ctx context.Context, users []string, teamID *string) (map[string]DNDStatus, error) {
 	values := url.Values{
 		"token": {api.token},
 		"users": {strings.Join(users, ",")},
+	}
+	if teamID != nil {
+		values.Set("team_id", *teamID)
 	}
 	response := &dndTeamInfoResponse{}
 
